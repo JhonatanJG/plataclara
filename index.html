@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlataClara - Control de gastos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand" role="banner">
+        <span class="brand-mark" aria-hidden="true">$</span>
+        <span class="brand-name">PlataClara</span>
+      </div>
+      <p class="topbar-tagline">Tu plata, clara y en orden</p>
+    </header>
+
+    <main class="container">
+      <!-- Vista Inicio -->
+      <section id="vista-inicio" class="vista activa" aria-labelledby="titulo-inicio">
+        <div class="hero">
+          <p class="saludo">Bienvenido a tu espacio financiero</p>
+          <h1 id="titulo-inicio">Controla tus gastos del mes</h1>
+          <p class="hero-texto">Registra tus movimientos y descubre en qué se va tu plata.</p>
+        </div>
+
+        <div class="tarjeta tarjeta-total">
+          <p class="tarjeta-etiqueta">Total gastado este mes</p>
+          <p id="inicio-total" class="total-monto">$ 0</p>
+          <div class="total-detalle">
+            <div class="detalle-item">
+              <span class="detalle-numero" id="inicio-cantidad">0</span>
+              <span class="detalle-texto">gastos registrados</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="acciones-inicio">
+          <button id="btn-ir-agregar" class="btn btn-principal btn-grande">
+            <span class="btn-icono" aria-hidden="true">+</span>
+            Agregar gasto
+          </button>
+          <button id="btn-ir-resumen" class="btn btn-secundario btn-grande">Ver resumen</button>
+        </div>
+      </section>
+
+      <!-- Vista Agregar gasto -->
+      <section id="vista-agregar" class="vista" aria-labelledby="titulo-agregar">
+        <div class="vista-encabezado">
+          <button id="btn-cancelar-agregar" class="btn-volver" aria-label="Volver al inicio">&larr; Volver</button>
+          <h2 id="titulo-agregar">Agregar gasto</h2>
+          <p class="vista-descripcion">Registra un nuevo gasto para llevar el control de tu mes.</p>
+        </div>
+
+        <form id="form-gasto" class="tarjeta formulario" novalidate>
+          <div class="campo">
+            <label for="monto">Monto (COP)</label>
+            <div class="input-con-prefijo">
+              <span class="prefijo" aria-hidden="true">$</span>
+              <input type="number" id="monto" name="monto" min="1" step="1" placeholder="25000" inputmode="numeric" autocomplete="off">
+            </div>
+            <p class="error-campo" id="error-monto" aria-live="polite"></p>
+          </div>
+
+          <div class="campo">
+            <label for="categoria">Categoría</label>
+            <select id="categoria" name="categoria">
+              <option value="Comida">Comida</option>
+              <option value="Transporte">Transporte</option>
+              <option value="Estudio">Estudio</option>
+              <option value="Ocio">Ocio</option>
+              <option value="Otros">Otros</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="fecha">Fecha</label>
+            <input type="date" id="fecha" name="fecha">
+            <p class="error-campo" id="error-fecha" aria-live="polite"></p>
+          </div>
+
+          <div class="campo">
+            <label for="descripcion">Descripción corta</label>
+            <input type="text" id="descripcion" name="descripcion" maxlength="60" placeholder="Ej: Almuerzo con amigos" autocomplete="off">
+            <p class="ayuda-campo">Opcional, máximo 60 caracteres.</p>
+          </div>
+
+          <div class="formulario-acciones">
+            <button type="button" id="btn-cancelar-form" class="btn btn-secundario">Cancelar</button>
+            <button type="submit" class="btn btn-principal">Guardar</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Vista Resumen -->
+      <section id="vista-resumen" class="vista" aria-labelledby="titulo-resumen">
+        <div class="vista-encabezado resumen-encabezado">
+          <div>
+            <button id="btn-volver-inicio" class="btn-volver" aria-label="Volver al inicio">&larr; Volver</button>
+            <h2 id="titulo-resumen">Resumen del mes</h2>
+            <p class="vista-descripcion">Revisa tus gastos y cómo se distribuyen por categoría.</p>
+          </div>
+          <div class="resumen-total-mes tarjeta-mini">
+            <span class="tarjeta-etiqueta">Total del mes</span>
+            <strong id="resumen-total">$ 0</strong>
+          </div>
+        </div>
+
+        <div id="resumen-contenido" class="resumen-contenido">
+          <div class="tarjeta">
+            <h3 class="subtitulo-seccion">Total por categoría</h3>
+            <div id="categorias-lista" class="categorias-lista"></div>
+          </div>
+
+          <div class="tarjeta">
+            <h3 class="subtitulo-seccion">Gastos registrados</h3>
+            <div id="gastos-lista" class="gastos-lista"></div>
+          </div>
+        </div>
+
+        <div id="estado-vacio" class="tarjeta estado-vacio oculto">
+          <div class="estado-vacio-icono" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="32" cy="32" r="30" stroke="currentColor" stroke-width="3"/>
+              <path d="M20 36h24M24 44h16M22 24h20" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Aún no tienes gastos registrados</h3>
+          <p>Empieza a controlar tu plata agregando tu primer gasto. ¡Es rápido y fácil!</p>
+          <button id="btn-vacio-agregar" class="btn btn-principal">Agregar mi primer gasto</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>PlataClara &middot; Tus datos se guardan en este dispositivo</p>
+    </footer>
+  </div>
+
+  <div id="toast" class="toast" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
