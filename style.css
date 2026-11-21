@@ -478,6 +478,46 @@ input[type="number"] {
   gap: 20px;
 }
 
+.resumen-filtro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.resumen-filtro label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.resumen-filtro select {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  color: var(--text);
+  background: #fff;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.resumen-filtro select:hover {
+  border-color: #94a3b8;
+}
+
+.resumen-filtro select:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);
+}
+
+.lista-vacia {
+  margin: 0;
+  padding: 16px 0;
+  color: var(--text-muted);
+  text-align: center;
+}
+
 .subtitulo-seccion {
   margin: 0 0 20px;
   font-size: 1.1rem;

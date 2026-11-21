@@ -66,6 +66,7 @@ function escaparHTML(texto) {
 // Datos y persistencia
 // =========================
 let gastos = [];
+let filtroCategoria = 'Todas';
 
 function obtenerGastosEjemplo() {
   // Fechas relativas al mes actual para que el resumen tenga sentido
@@ -156,6 +157,8 @@ const btnCancelarAgregar = document.getElementById('btn-cancelar-agregar');
 const btnCancelarForm = document.getElementById('btn-cancelar-form');
 
 const resumenTotal = document.getElementById('resumen-total');
+const resumenTotalEtiqueta = document.getElementById('resumen-total-etiqueta');
+const filtroCategoriaSelect = document.getElementById('filtro-categoria');
 const resumenContenido = document.getElementById('resumen-contenido');
 const categoriasLista = document.getElementById('categorias-lista');
 const gastosLista = document.getElementById('gastos-lista');
@@ -205,38 +208,62 @@ function renderizarInicio() {
 // =========================
 // Renderizado: Resumen
 // =========================
+function aplicarFiltroCategoria(lista) {
+  return filtroCategoria === 'Todas'
+    ? lista
+    : lista.filter(g => g.categoria === filtroCategoria);
+}
+
+function mensajeSinGastos() {
+  return filtroCategoria === 'Todas'
+    ? 'No hay gastos registrados este mes.'
+    : `No hay gastos de ${escaparHTML(filtroCategoria)} este mes.`;
+}
+
 function renderizarResumen() {
   if (gastos.length === 0) {
+    filtroCategoria = 'Todas';
+    filtroCategoriaSelect.value = filtroCategoria;
     resumenContenido.classList.add('oculto');
     estadoVacio.classList.remove('oculto');
     resumenTotal.textContent = formatearPesos(0);
+    resumenTotalEtiqueta.textContent = 'Total del mes';
     return;
   }
 
   resumenContenido.classList.remove('oculto');
   estadoVacio.classList.add('oculto');
 
-  const gastosMes = obtenerGastosMesActual();
-  const totalMes = gastosMes.reduce((sum, g) => sum + g.monto, 0);
-  resumenTotal.textContent = formatearPesos(totalMes);
+  const gastosFiltrados = aplicarFiltroCategoria(obtenerGastosMesActual());
+  const totalFiltrado = gastosFiltrados.reduce((sum, g) => sum + g.monto, 0);
+  resumenTotal.textContent = formatearPesos(totalFiltrado);
+  resumenTotalEtiqueta.textContent = filtroCategoria === 'Todas'
+    ? 'Total del mes'
+    : `Total de ${filtroCategoria}`;
 
-  renderizarCategorias(gastosMes, totalMes);
-  renderizarListaGastos();
+  renderizarCategorias(gastosFiltrados, totalFiltrado);
+  renderizarListaGastos(gastosFiltrados);
 }
 
-function renderizarCategorias(gastosMes, totalMes) {
+function renderizarCategorias(gastosFiltrados, totalFiltrado) {
+  if (totalFiltrado === 0) {
+    categoriasLista.innerHTML = `<p class="lista-vacia">${mensajeSinGastos()}</p>`;
+    return;
+  }
+
   // Calcular totales por categoría
   const totales = {};
   CATEGORIAS.forEach(cat => { totales[cat] = 0; });
-  gastosMes.forEach(g => {
+  gastosFiltrados.forEach(g => {
     if (totales[g.categoria] !== undefined) {
       totales[g.categoria] += g.monto;
     }
   });
 
-  categoriasLista.innerHTML = CATEGORIAS.map(cat => {
+  const categoriasVisibles = filtroCategoria === 'Todas' ? CATEGORIAS : [filtroCategoria];
+  categoriasLista.innerHTML = categoriasVisibles.map(cat => {
     const valor = totales[cat];
-    const porcentaje = totalMes > 0 ? (valor / totalMes) * 100 : 0;
+    const porcentaje = totalFiltrado > 0 ? (valor / totalFiltrado) * 100 : 0;
     const color = COLORES_CATEGORIA[cat];
     return `
       <div class="categoria-item">
@@ -255,9 +282,14 @@ function renderizarCategorias(gastosMes, totalMes) {
   }).join('');
 }
 
-function renderizarListaGastos() {
+function renderizarListaGastos(gastosFuente) {
+  if (gastosFuente.length === 0) {
+    gastosLista.innerHTML = `<p class="lista-vacia">${mensajeSinGastos()}</p>`;
+    return;
+  }
+
   // Ordenar del más reciente al más antiguo; si misma fecha, el más reciente agregado primero
-  const conIndice = gastos.map((g, i) => ({ ...g, _i: i }));
+  const conIndice = gastosFuente.map((g, i) => ({ ...g, _i: i }));
   conIndice.sort((a, b) => {
     const cmp = b.fecha.localeCompare(a.fecha);
     if (cmp !== 0) return cmp;
@@ -398,6 +430,10 @@ function inicializarEventos() {
 
   formGasto.addEventListener('submit', manejarEnvio);
   gastosLista.addEventListener('click', manejarClickLista);
+  filtroCategoriaSelect.addEventListener('change', () => {
+    filtroCategoria = filtroCategoriaSelect.value;
+    renderizarResumen();
+  });
 
   // Limpiar error al escribir/cambiar
   inputMonto.addEventListener('input', () => {
