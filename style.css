@@ -297,12 +297,15 @@ select:focus-visible {
 }
 
 .btn-volver {
-  padding: 6px 0;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 0;
   color: var(--text-muted);
   font-size: 0.95rem;
   font-weight: 500;
   transition: color var(--transition);
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .btn-volver:hover {
@@ -351,13 +354,13 @@ select:focus-visible {
 .formulario {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 22px;
 }
 
 .campo {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .campo label {
@@ -369,6 +372,7 @@ select:focus-visible {
 .campo input,
 .campo select {
   width: 100%;
+  min-height: 48px;
   padding: 12px 14px;
   border: 1px solid #d1d5db;
   border-radius: var(--radius-sm);
@@ -376,6 +380,15 @@ select:focus-visible {
   color: var(--text);
   background: #fff;
   transition: border-color var(--transition), box-shadow var(--transition);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.campo select {
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
 }
 
 .campo input:hover,
@@ -415,7 +428,7 @@ select:focus-visible {
 }
 
 .input-con-prefijo input {
-  padding-left: 34px;
+  padding-left: 36px;
 }
 
 /* Ocultar flechas del input number */
@@ -428,16 +441,22 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
+input[type="date"] {
+  min-width: 0;
+}
+
 .ayuda-campo {
   margin: 0;
   font-size: 0.85rem;
   color: var(--text-muted);
+  line-height: 1.4;
 }
 
 .error-campo {
   margin: 0;
   font-size: 0.85rem;
   color: var(--danger);
+  line-height: 1.4;
   min-height: 1.25em;
 }
 
@@ -449,7 +468,7 @@ input[type="number"] {
   display: flex;
   gap: 12px;
   justify-content: flex-end;
-  margin-top: 8px;
+  margin-top: 4px;
   padding-top: 20px;
   border-top: 1px solid var(--border);
 }
@@ -790,6 +809,18 @@ input[type="number"] {
     padding: 16px 16px 32px;
   }
 
+  .vista-encabezado {
+    margin-bottom: 20px;
+  }
+
+  .vista-encabezado h2 {
+    font-size: 1.6rem;
+  }
+
+  .vista-descripcion {
+    font-size: 0.95rem;
+  }
+
   .tarjeta {
     padding: 20px;
     border-radius: 14px;
@@ -799,9 +830,19 @@ input[type="number"] {
     padding: 28px 20px;
   }
 
+  .formulario {
+    gap: 18px;
+  }
+
+  .campo input,
+  .campo select {
+    font-size: 16px;
+  }
+
   .resumen-encabezado {
     flex-direction: column;
     align-items: stretch;
+    gap: 14px;
   }
 
   .tarjeta-mini {
@@ -809,36 +850,80 @@ input[type="number"] {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
   }
 
   .tarjeta-mini .tarjeta-etiqueta {
     margin: 0;
   }
 
+  .resumen-filtro {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .resumen-filtro select {
+    width: 100%;
+    min-height: 48px;
+    font-size: 16px;
+  }
+
+  .seccion-encabezado {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .seccion-encabezado .btn-peligro {
+    width: 100%;
+    justify-content: center;
+  }
+
   .gasto-item {
     align-items: flex-start;
+    gap: 10px;
   }
 
   .gasto-derecha {
     flex-direction: column;
     align-items: flex-end;
-    gap: 4px;
+    gap: 6px;
   }
 
   .gasto-monto {
     font-size: 0.95rem;
   }
 
+  .btn-eliminar {
+    width: 40px;
+    height: 40px;
+  }
+
   .formulario-acciones {
     flex-direction: column-reverse;
+    gap: 10px;
   }
 
   .formulario-acciones .btn {
     width: 100%;
+    min-height: 48px;
+  }
+
+  .toast {
+    width: calc(100vw - 32px);
+    bottom: 16px;
   }
 }
 
 @media (max-width: 400px) {
+  .container {
+    padding: 14px 14px 28px;
+  }
+
+  .tarjeta,
+  .tarjeta-total {
+    padding: 18px;
+  }
+
   .gasto-superior {
     flex-direction: column;
     align-items: flex-start;
@@ -847,6 +932,10 @@ input[type="number"] {
 
   .gasto-descripcion {
     white-space: normal;
+  }
+
+  .gasto-derecha {
+    gap: 4px;
   }
 }
 
