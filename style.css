@@ -309,6 +309,24 @@ select:focus-visible {
   color: var(--teal);
 }
 
+.btn-peligro {
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  background: var(--surface);
+  color: var(--danger);
+  border-color: var(--danger-soft);
+}
+
+.btn-peligro:hover {
+  background: var(--danger-soft);
+  border-color: var(--danger);
+}
+
+.btn-peligro svg {
+  width: 16px;
+  height: 16px;
+}
+
 /* =========================
    Encabezados de vista
    ========================= */
@@ -522,6 +540,19 @@ input[type="number"] {
   margin: 0 0 20px;
   font-size: 1.1rem;
   color: var(--text);
+}
+
+.seccion-encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.seccion-encabezado .subtitulo-seccion {
+  margin-bottom: 0;
 }
 
 /* Categorías */

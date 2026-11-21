@@ -162,6 +162,7 @@ const filtroCategoriaSelect = document.getElementById('filtro-categoria');
 const resumenContenido = document.getElementById('resumen-contenido');
 const categoriasLista = document.getElementById('categorias-lista');
 const gastosLista = document.getElementById('gastos-lista');
+const btnBorrarTodos = document.getElementById('btn-borrar-todos');
 const estadoVacio = document.getElementById('estado-vacio');
 const btnVolverInicio = document.getElementById('btn-volver-inicio');
 const btnVacioAgregar = document.getElementById('btn-vacio-agregar');
@@ -404,6 +405,23 @@ function manejarClickLista(e) {
   mostrarToast('Gasto eliminado');
 }
 
+function borrarTodosLosGastos() {
+  const cantidad = gastos.length;
+  if (cantidad === 0) return;
+
+  const mensaje = cantidad === 1
+    ? '¿Borrar el gasto registrado? Esta acción no se puede deshacer.'
+    : `¿Borrar los ${cantidad} gastos registrados? Esta acción no se puede deshacer.`;
+  if (!window.confirm(mensaje)) return;
+
+  gastos = [];
+  guardarGastos();
+  filtroCategoria = 'Todas';
+  filtroCategoriaSelect.value = filtroCategoria;
+  renderizarResumen();
+  mostrarToast('Todos los gastos fueron borrados');
+}
+
 // =========================
 // Toast / feedback
 // =========================
@@ -430,6 +448,7 @@ function inicializarEventos() {
 
   formGasto.addEventListener('submit', manejarEnvio);
   gastosLista.addEventListener('click', manejarClickLista);
+  btnBorrarTodos.addEventListener('click', borrarTodosLosGastos);
   filtroCategoriaSelect.addEventListener('change', () => {
     filtroCategoria = filtroCategoriaSelect.value;
     renderizarResumen();
